@@ -1,5 +1,4 @@
 import { Logger } from "@aws-lambda-powertools/logger";
-import axios, { AxiosInstance } from "axios";
 import { inject, injectable, targetName } from "inversify";
 import { TYPES } from "../../common/types";
 
