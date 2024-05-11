@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2016",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "lib": ["es2016", "ES2019"],
+    "types": ["reflect-metadata", "aws-lambda", "jest", "node"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,18 @@
+version: 2.22.0
+
+services:
+  lambda:
+    image: ${container_name}
+    container_name: ${container_name}
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+        AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+        environment: ${environment}
+    volumes:
+      - ./app/:/app/
+    ports:
+      - "4000:4000"

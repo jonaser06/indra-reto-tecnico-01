@@ -1,0 +1,73 @@
+service: indra-reto-tecnico-01
+frameworkVersion: "3"
+plugins:
+  - serverless-offline-http-mock
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-esbuild
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "arn:aws:dynamodb:us-east-1:557994696962:table/dyn-swapi-01"
+
+functions:
+  AddSpecies:
+    handler: ./src/handlers/add-species/handler.handler
+    events:
+      - http:
+          path: species/
+          method: post
+          integration: lambda
+          cors: true
+          request:
+            template:
+              application/json: |
+                $input.json('$')
+
+  ListSpecies:
+    handler: ./src/handlers/list-species/handler.handler
+    events:
+      - http:
+          path: species/{id}
+          method: get
+          integration: lambda
+          cors: true
+          request:
+            template:
+              application/json: |
+                #set($inputRoot = $input.path('$'))
+                {
+                  "id": "$input.params('id')"
+                }
+
+resources:
+  Resources:
+    DynSwapi:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "dyn-swapi-01"
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 4000
+    dockerHost: host.docker.internal
+    dockerHostServicePath: ${PWD}
